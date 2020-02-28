@@ -1,6 +1,7 @@
 package co.simplon.aliment.model;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
 
 @Entity
@@ -11,36 +12,45 @@ public class Aliment {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "aliment_id_seq")
     private Long id;
 
+    @NotNull
+    @Column(nullable = false)
     private String name;
 
+    @NotNull
     @ManyToOne
+    @JoinColumn(nullable = false)
     private AlimentClass alimentClass;
 
-    @Column(precision = 5, scale = 2)
+    @NotNull
+    @Column(precision = 5, scale = 2, nullable = false)
     private BigDecimal energy;
 
-    @Column(precision = 5, scale = 2)
+    @NotNull
+    @Column(precision = 5, scale = 2, nullable = false)
     private BigDecimal water;
 
-    @Column(precision = 5, scale = 2)
+    @NotNull
+    @Column(precision = 5, scale = 2, nullable = false)
     private BigDecimal proteins;
 
-    @Column(precision = 5, scale = 2)
+    @NotNull
+    @Column(precision = 5, scale = 2, nullable = false)
     private BigDecimal lipids;
 
-    @Column(precision = 5, scale = 2)
+    @NotNull
+    @Column(precision = 5, scale = 2, nullable = false)
     private BigDecimal carbs;
 
-    @Column(precision = 5, scale = 2)
+    @NotNull
+    @Column(precision = 5, scale = 2, nullable = false)
     private BigDecimal sugars;
 
-    @Column(precision = 5, scale = 2)
+    @NotNull
+    @Column(precision = 5, scale = 2, nullable = false)
     private BigDecimal fibers;
 
     public Aliment() {
     }
-
-
 
     public Long getId() {
         return id;

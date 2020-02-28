@@ -3,6 +3,7 @@ package co.simplon.aliment.model;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,6 +15,8 @@ public class AlimentClass {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "aliment_class_id_seq")
     private Long id;
 
+    @NotNull
+    @Column(nullable = false)
     private String name;
 
     @JsonIgnore

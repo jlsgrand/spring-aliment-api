@@ -1,31 +1,37 @@
 package co.simplon.aliment.controller;
 
+import co.simplon.aliment.exception.EntityNotFoundException;
 import co.simplon.aliment.model.Aliment;
-import co.simplon.aliment.repository.AlimentRepository;
+import co.simplon.aliment.service.AlimentService;
 import io.swagger.annotations.ApiParam;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.context.request.WebRequest;
 
 import javax.validation.Valid;
-import java.lang.reflect.Field;
-import java.util.ArrayList;
-import java.util.List;
 
 @RestController
 @RequestMapping("/api/aliments")
 public class AlimentController {
 
-    private AlimentRepository alimentRepository;
+    private AlimentService alimentService;
 
-    public AlimentController(AlimentRepository alimentRepository) {
-        this.alimentRepository = alimentRepository;
+    public AlimentController(AlimentService alimentService) {
+        this.alimentService = alimentService;
     }
 
+    /**
+     * Controller method enabling Aliment list retrieval with pagination and sorting.
+     *
+     * @param pageNumber the page number we want to get (default is 0)
+     * @param pageSize   the page size we want to define (default is 50)
+     * @param criteria   the sorting criteria (default is aliment name)
+     * @param direction  the sorting direction (default is ascending)
+     * @return a Page object containing Aliments.
+     */
     @GetMapping
     public Page<Aliment> getAliments(
             @ApiParam(value = "Query param for 'pageNumber'") @Valid @RequestParam(value = "pageNumber", required = false) Integer pageNumber,
@@ -33,30 +39,31 @@ public class AlimentController {
             @ApiParam(value = "Query param for 'sort' criteria") @Valid @RequestParam(value = "sort", required = false) String criteria,
             @ApiParam(value = "Query param for 'sort' direction") @Valid @RequestParam(value = "direction", required = false) String direction) {
 
-        // If page number is not null then use it for paging, otherwise provide page 0
-        int pNumber = (pageNumber != null) ? pageNumber : 0;
-        // If page size is not null then use it for paging, otherwise use default 50 page size
-        int pSize = (pageSize != null) ? pageSize : 50;
+        return alimentService.getAliments(pageNumber, pageSize, criteria, direction);
+    }
 
-        // By default sort on aliment name
-        String sortingCriteria = "name";
+    /**
+     * Getting an Aliment with its ID.
+     *
+     * @param alimentId the aliment ID to look for.
+     * @return  the aliment if found, an Entity not found Exception otherwise
+     * @see co.simplon.aliment.exception.AlimentApiExceptionHandler#handleEntityNotFoundException(EntityNotFoundException) for Exception handling
+     */
+    @GetMapping("/{alimentId}")
+    public Aliment getAlimentById(@PathVariable Long alimentId) {
+        return alimentService.getAlimentById(alimentId);
+    }
 
-        // If sorting criteria matches an aliment field name, then use it for sorting
-        Field[] fields = Aliment.class.getDeclaredFields();
-        List<String> possibleCriteria = new ArrayList<>();
-        for (Field field : fields) {
-            possibleCriteria.add(field.getName().toLowerCase());
-        }
-        if (criteria != null && possibleCriteria.contains(criteria)) {
-            sortingCriteria = criteria;
-        }
-
-        // By default sorting ascending, but if user explicitely choose desc, then sort descending
-        Sort.Direction sortingDirection = Sort.Direction.ASC;
-        if (direction != null) {
-            sortingDirection = direction.equalsIgnoreCase("desc") ? Sort.Direction.DESC : Sort.Direction.ASC;
-        }
-
-        return alimentRepository.findAll(PageRequest.of(pNumber, pSize, Sort.by(sortingDirection, sortingCriteria)));
+    /**
+     * Creating an aliment.
+     *
+     * @param newAliment the new aliment to create (should be valid)
+     * @return the created aliment if valid, MethodArgumentNotValidException otherwise
+     * @see co.simplon.aliment.exception.AlimentApiExceptionHandler#handleMethodArgumentNotValid(MethodArgumentNotValidException, HttpHeaders, HttpStatus, WebRequest)
+     *      for Exception handling
+     */
+    @PostMapping
+    public Aliment createAliment(@RequestBody @Valid Aliment newAliment) {
+        return alimentService.createAliment(newAliment);
     }
 }

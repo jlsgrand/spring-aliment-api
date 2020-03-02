@@ -17,7 +17,7 @@ public interface AlimentService {
      * @param direction  the sorting direction
      * @return a page object with aliments
      */
-    Page<Aliment> getAliments(Integer pageNumber, Integer pageSize, String criteria, String direction);
+    Page<Aliment> getAliments(int pageNumber, int pageSize, String criteria, String direction);
 
     /**
      * Get one aliment with its ID.

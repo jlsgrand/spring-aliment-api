@@ -3,6 +3,7 @@ package co.simplon.aliment.controller;
 import co.simplon.aliment.exception.EntityNotFoundException;
 import co.simplon.aliment.model.Aliment;
 import co.simplon.aliment.service.AlimentService;
+import co.simplon.aliment.utility.Reflection;
 import io.swagger.annotations.ApiParam;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpHeaders;
@@ -12,6 +13,9 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.request.WebRequest;
 
 import javax.validation.Valid;
+import java.lang.reflect.Field;
+import java.util.ArrayList;
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/aliments")
@@ -34,11 +38,11 @@ public class AlimentController {
      */
     @GetMapping
     public Page<Aliment> getAliments(
-            @ApiParam(value = "Query param for 'pageNumber'") @Valid @RequestParam(value = "pageNumber", required = false) Integer pageNumber,
-            @ApiParam(value = "Query param for 'pageSize'") @Valid @RequestParam(value = "pageSize", required = false) Integer pageSize,
-            @ApiParam(value = "Query param for 'sort' criteria") @Valid @RequestParam(value = "sort", required = false) String criteria,
-            @ApiParam(value = "Query param for 'sort' direction") @Valid @RequestParam(value = "direction", required = false) String direction) {
-
+            @ApiParam(value = "Query param for 'pageNumber'") @Valid @RequestParam(value = "pageNumber", defaultValue = "0") Integer pageNumber,
+            @ApiParam(value = "Query param for 'pageSize'") @Valid @RequestParam(value = "pageSize", defaultValue = "50") Integer pageSize,
+            @ApiParam(value = "Query param for 'sort' criteria") @Valid @RequestParam(value = "sort", defaultValue = "name") String criteria,
+            @ApiParam(value = "Query param for 'sort' direction") @Valid @RequestParam(value = "direction", defaultValue = "asc") String direction) {
+        criteria= Reflection.fieldNameOrDefault(Aliment.class,criteria,"name");
         return alimentService.getAliments(pageNumber, pageSize, criteria, direction);
     }
 

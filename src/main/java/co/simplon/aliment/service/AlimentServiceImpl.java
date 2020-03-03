@@ -1,8 +1,10 @@
 package co.simplon.aliment.service;
 
 import co.simplon.aliment.exception.EntityNotFoundException;
+import co.simplon.aliment.exception.InvalidSortingCriterionException;
 import co.simplon.aliment.model.Aliment;
 import co.simplon.aliment.repository.AlimentRepository;
+import co.simplon.aliment.utility.Reflection;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -25,6 +27,9 @@ public class AlimentServiceImpl implements AlimentService {
     @Override
     public Page<Aliment> getAliments(int pNumber, int pSize, String criteria, String direction) {
         // By default sorting ascending, but if user explicitly choose desc, then sort descending
+        if(!Reflection.isFieldName(Aliment.class, criteria)){
+            throw new InvalidSortingCriterionException(Aliment.class.getName(),criteria);
+        }
         Sort.Direction sortingDirection = direction.equalsIgnoreCase("desc") ? Sort.Direction.DESC : Sort.Direction.ASC;
         return alimentRepository.findAll(PageRequest.of(pNumber, pSize, Sort.by(sortingDirection, criteria)));
     }
@@ -36,7 +41,7 @@ public class AlimentServiceImpl implements AlimentService {
         if (dbAliment.isPresent()) {
             return dbAliment.get();
         } else {
-            throw new EntityNotFoundException("The aliment with ID: " + alimentId + " cannot be found in DB", "Aliment");
+            throw new EntityNotFoundException(alimentId, "Aliment");
         }
     }
 

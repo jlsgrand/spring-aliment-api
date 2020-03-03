@@ -42,7 +42,6 @@ public class AlimentController {
             @ApiParam(value = "Query param for 'pageSize'") @Valid @RequestParam(value = "pageSize", defaultValue = "50") Integer pageSize,
             @ApiParam(value = "Query param for 'sort' criteria") @Valid @RequestParam(value = "sort", defaultValue = "name") String criteria,
             @ApiParam(value = "Query param for 'sort' direction") @Valid @RequestParam(value = "direction", defaultValue = "asc") String direction) {
-        criteria= Reflection.fieldNameOrDefault(Aliment.class,criteria,"name");
         return alimentService.getAliments(pageNumber, pageSize, criteria, direction);
     }
 

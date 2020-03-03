@@ -30,6 +30,21 @@ public class AlimentApiExceptionHandler extends ResponseEntityExceptionHandler {
                 ex.getMessage());
         return new ResponseEntity<>(apiError, HttpStatus.NOT_FOUND);
     }
+    /**
+     * How to proceed in case of an EntityNotFoundException
+     *
+     * @param ex the EntityNotFoundException
+     * @return an API Error wrapped in a ResponseEntity with status 404.
+     */
+    @ExceptionHandler(InvalidSortingCriterionException.class)
+    public ResponseEntity<Object> handleEntityNotFoundException(InvalidSortingCriterionException ex) {
+        ApiError apiError = new ApiError(
+                "001",
+                "Get request with invalid sorting criterion "+ex.getCriterion()+" on Entity " + ex.getEntityName(),
+                ex.getMessage());
+        return new ResponseEntity<>(apiError, HttpStatus.BAD_REQUEST);
+    }
+
 
     /**
      * How to proceed in case of an MethodArgumentNotValidException

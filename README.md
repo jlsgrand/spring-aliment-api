@@ -34,7 +34,7 @@ Celle-ci est générée grâce aux annotations comme [@ApiParam](http://docs.swa
 
 ## Paramètres par défaut de la pagination
 
-Utiliser l'annotation [PageableDefault](https://docs.spring.io/spring-data/commons/docs/current/api/org/springframework/data/web/PageableDefault.html) pour gérer les valeurs par défaut de pagination.
+Utiliser l'annotation [PageableDefault](https://docs.spring.io/spring-data/commons/docs/current/api/org/springframework/data/web/PageableDefault.html) pour gérer les valeurs par défaut de pagination. Si l'on veut utiliser un paramètre de type [Pageable](https://docs.spring.io/spring-data/commons/docs/current/api/org/springframework/data/domain/Pageable.html) au niveau de la requête, il faut [aider swagger à le gérer](https://springdoc.github.io/springdoc-openapi-demos/faq.html#how-can-i-map-pageable-spring-date-commons-object-to-correct-url-parameter-in-swagger-ui).
 
 ## Tri
 

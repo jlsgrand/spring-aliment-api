@@ -27,6 +27,11 @@ Au niveau *JPA*, on utilise l'interface [PagingAndSortingRepository](https://doc
 
 # TODO
 
+## Tester l'interface avec Swagger
+
+En utilisant l'URL http://localhost:8080/swagger-ui.html .
+Celle-ci est générée grâce aux annotations comme [@ApiParam](http://docs.swagger.io/swagger-core/v1.5.0/apidocs/io/swagger/annotations/ApiParam.html).
+
 ## Paramètres par défaut de la pagination
 
 Utiliser l'annotation [PageableDefault](https://docs.spring.io/spring-data/commons/docs/current/api/org/springframework/data/web/PageableDefault.html) pour gérer les valeurs par défaut de pagination.

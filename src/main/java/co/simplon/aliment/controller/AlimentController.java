@@ -4,7 +4,12 @@ import co.simplon.aliment.exception.EntityNotFoundException;
 import co.simplon.aliment.model.Aliment;
 import co.simplon.aliment.service.AlimentService;
 import io.swagger.annotations.ApiParam;
+import io.swagger.v3.oas.annotations.Parameter;
+//import org.springdoc.core.converters.Pageable;
+import org.springframework.data.domain.Pageable;
+import org.springdoc.core.converters.PageableAsQueryParam;
 import org.springframework.data.domain.Page;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -26,22 +31,15 @@ public class AlimentController {
     /**
      * Controller method enabling Aliment list retrieval with pagination and sorting.
      *
-     * @param pageNumber the page number we want to get (default is 0)
-     * @param pageSize   the page size we want to define (default is 50)
-     * @param criteria   the sorting criteria (default is aliment name)
-     * @param direction  the sorting direction (default is ascending)
+     * @param pageable parameters of the page we want to get
      * @return a Page object containing Aliments.
      */
-    @GetMapping
+    @GetMapping("")
+    @PageableAsQueryParam
     public Page<Aliment> getAliments(
-            @ApiParam(value = "Query param for 'pageNumber'") @Valid @RequestParam(value = "pageNumber", required = false) Integer pageNumber,
-            @ApiParam(value = "Query param for 'pageSize'") @Valid @RequestParam(value = "pageSize", required = false) Integer pageSize,
-            @ApiParam(value = "Query param for 'sort' criteria") @Valid @RequestParam(value = "sort", required = false) String criteria,
-            @ApiParam(value = "Query param for 'sort' direction") @Valid @RequestParam(value = "direction", required = false) String direction) {
-
-        return alimentService.getAliments(pageNumber, pageSize, criteria, direction);
+            @PageableDefault(size=8) @Parameter(hidden=true) Pageable pageable) {
+        return alimentService.getAliments(pageable);
     }
-
     /**
      * Getting an Aliment with its ID.
      *

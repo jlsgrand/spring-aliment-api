@@ -3,6 +3,7 @@ package co.simplon.aliment.service;
 import co.simplon.aliment.exception.EntityNotFoundException;
 import co.simplon.aliment.model.Aliment;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -11,13 +12,10 @@ public interface AlimentService {
     /**
      * Aliment list retrieval.
      *
-     * @param pageNumber the page number to get
-     * @param pageSize   the page size to choose
-     * @param criteria   the sorting criteria
-     * @param direction  the sorting direction
+     * @param pageable the page  to get
      * @return a page object with aliments
      */
-    Page<Aliment> getAliments(Integer pageNumber, Integer pageSize, String criteria, String direction);
+    Page<Aliment> getAliments(Pageable pageable);
 
     /**
      * Get one aliment with its ID.

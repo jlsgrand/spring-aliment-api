@@ -44,3 +44,4 @@ Essayer de généraliser le code qui gère l'ordre de tri.
 
 Au delà de REST, on pourrait vouloir implémenter [HATEOAS](https://fr.wikipedia.org/wiki/HATEOAS) avec notamment les liens vers les pages suivante et précedente d'une page donnée.
 La bibliothèque [spring-hateoas](https://spring.io/projects/spring-hateoas) met à disposition un framework pour réaliser une telle implémentation.
+Pour automatiser l'implémentation d'accès à nos données par REST, on peut aussi utiliser [spring-data-rest](https://spring.io/projects/spring-data-rest), y compris pour [gérer la pagination](https://docs.spring.io/spring-data/rest/docs/current/reference/html/#paging-and-sorting).
